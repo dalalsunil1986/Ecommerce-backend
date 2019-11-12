@@ -5,6 +5,6 @@ const {
 module.exports = (router) => {
 
     router.post('/signup', userSignUpValidator, userController.signup);
-    router.post('/signin', userSignUpValidator, userController.signin);
+    router.post('/signin', userController.signin);
 
 }
