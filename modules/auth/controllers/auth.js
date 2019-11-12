@@ -5,7 +5,7 @@ const expressJwt = require('express-jwt');
 const createToken = require('../../helpers/token.util')
 const validator = require('../../helpers/encryption');
 
-const userController = {
+const authController = {
     signup: (req, res, next) => {
         validator
             .encryptPassword(req.body.password)
@@ -70,8 +70,17 @@ const userController = {
                 .catch(err => res.status(401).json(err));
 
         });
-    }
+    },
+    signout: (req, res) => {
+        res.clearCookie('token');
+        res
+            .status(200)
+            .json({message: "Signout Successfull"});
+    },
+
+    //protecting routes method using express-jwt
+    requireSignin: expressJwt({secret: process.env.JWT_SECRET, userProperty: 'auth'})
 
 };
 
-module.exports = userController;
+module.exports = authController;
