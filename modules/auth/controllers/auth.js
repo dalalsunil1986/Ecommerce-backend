@@ -79,7 +79,25 @@ const authController = {
     },
 
     //protecting routes method using express-jwt
-    requireSignin: expressJwt({secret: process.env.JWT_SECRET, userProperty: 'auth'})
+    requireSignin: expressJwt({secret: process.env.JWT_SECRET, userProperty: 'auth'}),
+
+    isAuth: (req, res, next) => {
+        let user = req.profile && req.auth && req.profile._id == req.auth.user.id;
+        if (!user) {
+            return res
+                .status(403)
+                .json({error: 'Access Denied'});
+        }
+        next();
+    },
+    isAdmin: (req, res, next) => {
+        if (req.profile.role === 0) {
+            res
+                .status(403)
+                .json({error: 'User not Authorised'});
+        }
+        next();
+    }
 
 };
 
