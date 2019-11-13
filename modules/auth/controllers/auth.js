@@ -92,7 +92,7 @@ const authController = {
     },
     isAdmin: (req, res, next) => {
         if (req.profile.role === 0) {
-            res
+            return res
                 .status(403)
                 .json({error: 'User not Authorised'});
         }
