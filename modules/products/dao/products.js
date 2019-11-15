@@ -6,16 +6,28 @@ const productDao = {
             productModel
                 .findOne(query, function (err, product) {
                     if (err || !product) {
-                        return reject({
-                            status: 400,
-                            success: false,
-                            err
-                        });
+                        return reject({status: 400, success: false, err});
                     } else {
-                        return resolve({
-                            product
-                        });
+                        return resolve({product});
                     }
+                });
+        });
+    },
+    getAllProducts: (query) => {
+        return new Promise((resolve, reject) => {
+            productModel
+                .find()
+                .select("-photo")
+                .populate('categories')
+                .sort([
+                    [query.sortBy, query.order]
+                ])
+                .limit(query.limit)
+                .exec((err, products) => {
+                    if (err || !products) {
+                        return reject({error: "Products Not Found!!!"});
+                    }
+                    return resolve({products});
                 });
         });
     }

@@ -101,8 +101,9 @@ const productController = {
             } = fields;
             // const product = new productModel(fields);
             let product = req.product;
-            product = _.extend(product,fields);
-            ///----------------------------------------///--------------------------------------///
+            product = _.extend(product, fields);
+            // /----------------------------------------///---------------------------------
+            // - ----///
             if (files.photo) {
                 if (files.photo.size > 1000000) {
                     return res
@@ -123,6 +124,33 @@ const productController = {
                     .json({product});
             })
         });
+    },
+    getAllProducts: (req, res, next) => {
+        let order = req.query.order
+            ? req.query.order
+            : 'asc';
+        let limit = req.query.limit
+            ? parseInt(req.query.limit)
+            : 6;
+        let sortBy = req.query.sortBy
+            ? req.query.sortBy
+            : '_id';
+        let query = {
+            order,
+            limit,
+            sortBy
+        };
+        productDao
+            .getAllProducts(query)
+            .then((result) => {
+                res.json(result.products);
+            })
+            .catch((err) => {
+                return res
+                    .status(400)
+                    .json({message: " "});
+            })
+
     }
 };
 
