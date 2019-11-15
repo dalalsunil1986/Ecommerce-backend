@@ -67,6 +67,20 @@ const categoryController = {
             }
             return res.json({deletedCategory, "message": " Category deleted!!! "});
         });
+    },
+    findAllCategory: (req, res) => {
+        categoryDao
+            .findAllCategory()
+            .then((result) => {
+                res
+                    .status(200)
+                    .json({categories: result.categories});
+            })
+            .catch((err) => {
+                res
+                    .status(400)
+                    .json(err);
+            });
     }
 };
 

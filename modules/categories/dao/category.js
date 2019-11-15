@@ -13,6 +13,16 @@ const categoryDao = {
                     }
                 });
         });
+    },
+    findAllCategory: () => {
+        return new Promise((resolve, reject) => {
+            categoryModel.find((err,categories) => {
+                if(err) {
+                    return reject({error: errorHandler(err)});
+                }
+                return resolve({categories});
+            });
+        });
     }
 };
 

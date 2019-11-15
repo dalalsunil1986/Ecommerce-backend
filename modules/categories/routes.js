@@ -8,6 +8,7 @@ module.exports = (router) => {
     router.post('/category/create/:userId', authController.requireSignin, authController.isAuth, authController.isAdmin, categoryController.createCategory);
     router.put('/category/:categoryId/:userId', authController.requireSignin, authController.isAuth, authController.isAdmin, categoryController.updateCategory);
     router.delete('/category/:categoryId/:userId', authController.requireSignin, authController.isAuth, authController.isAdmin,categoryController.deleteCategory);
+    router.get('/categories',categoryController.findAllCategory);
 
     router.param('categoryId', categoryController.findCategoryById);
     router.param('userId', userController.findUserById);
