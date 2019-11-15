@@ -33,7 +33,7 @@ const categoryController = {
             .catch((err) => {
                 res
                     .status(400)
-                    .json({"message":"Category does not exist!!! "});
+                    .json({"message": "Category does not exist!!! "});
             });
     },
     readCategory: (req, res, next) => {
@@ -41,6 +41,32 @@ const categoryController = {
         return res
             .status(200)
             .json({category});
+    },
+    updateCategory: (req, res) => {
+        let category = req.category;
+        category.name = req.body.name;
+        category.save((err, category) => {
+            if (err) {
+                return res
+                    .status(400)
+                    .json({error: errorHandler(err)});
+            }
+            return res
+                .status(200)
+                .json({category});
+        });
+    },
+    deleteCategory: (req, res) => {
+        let category = req.category;
+
+        category.remove((err, deletedCategory) => {
+            if (err) {
+                return res
+                    .status(400)
+                    .json({error: errorHandler(err)});
+            }
+            return res.json({deletedCategory, "message": " Category deleted!!! "});
+        });
     }
 };
 

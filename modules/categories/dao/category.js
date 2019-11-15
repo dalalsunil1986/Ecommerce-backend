@@ -7,7 +7,7 @@ const categoryDao = {
             categoryModel
                 .findOne(query, function (err, category) {
                     if (err || !category) {
-                        return reject({error: errorHandler(err)});
+                        return reject({err});
                     } else {
                         return resolve({category});
                     }
