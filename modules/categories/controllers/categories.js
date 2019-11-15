@@ -33,7 +33,7 @@ const categoryController = {
             .catch((err) => {
                 res
                     .status(400)
-                    .json(err);
+                    .json({"message":"Category does not exist!!! "});
             });
     },
     readCategory: (req, res, next) => {
