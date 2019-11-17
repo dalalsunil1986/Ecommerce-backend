@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const expressVadilator = require('express-validator');
+const cors = require('cors');
 
 
 //app
@@ -14,10 +15,12 @@ const router = express.Router();
 
 //middle ware
 app.use(morgan('dev'));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(expressVadilator());
 app.use('/', require('./routes/index')(router));
+
 
 
 
