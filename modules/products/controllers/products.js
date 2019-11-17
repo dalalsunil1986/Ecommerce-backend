@@ -151,6 +151,84 @@ const productController = {
                     .json({message: " "});
             })
 
+    },
+    relatedList: (req, res, next) => {
+        let limit = req.query.limit
+            ? parseInt(req.query.limit)
+            : 6;
+        productModel.find({
+            _id: {
+                $ne: req.product
+            },
+                category: req.product.category
+            })
+            .limit(limit)
+            .populate('categories', '_id name')
+            .exec((err, products) => {
+                if (err || !products) {
+                    return res
+                        .status(400)
+                        .json({error: "Products Not Found!!!"});
+                }
+                res
+                    .status(200)
+                    .json(products);
+            });
+    },
+    getProductCategories: (req, res, next) => {
+        productModel.distinct("category", {}, (err, categories) => {
+            if (err || !categories) {
+                return res
+                    .status(400)
+                    .json({error: "Products Not Found!!!"});
+            }
+            res
+                .status(200)
+                .json(categories);
+        })
+    },
+    searchProduct: (req, res, next) => {
+        let order = req.body.order
+            ? req.body.order
+            : "desc";
+        let sortBy = req.body.sortBy
+            ? req.body.sortBy
+            : "_id";
+        let limit = req.body.limit
+            ? parseInt(req.body.limit)
+            : 100;
+        let skip = parseInt(req.body.skip);
+        let findArgs = {};
+        for (let key in req.body.filters) {
+            if (req.body.filters[key].length > 0) {
+                if (key === "price") {
+                    // gte -  greater than price [0-10] lte - less than
+                    findArgs[key] = {
+                        $gte: req.body.filters[key][0],
+                        $lte: req.body.filters[key][1]
+                    };
+                } else {
+                    findArgs[key] = req.body.filters[key];
+                }
+            }
+        }
+        productModel
+            .find(findArgs)
+            .select("-photo")
+            .populate("category")
+            .sort([
+                [sortBy, order]
+            ])
+            .skip(skip)
+            .limit(limit)
+            .exec((err, data) => {
+                if (err) {
+                    return res
+                        .status(400)
+                        .json({error: "Products not found"});
+                }
+                res.json({size: data.length, data});
+            });
     }
 };
 
