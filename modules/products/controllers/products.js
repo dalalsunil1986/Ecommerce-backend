@@ -23,7 +23,7 @@ const productController = {
                 quantity,
                 category
             } = fields;
-            if (!name || !description || !category || !price || !shipping || !quantity || !photo) {
+            if (!name || !description || !category || !price || !shipping || !quantity) {
                 return res
                     .status(400)
                     .json({err: "All fields are required!!!!"});
