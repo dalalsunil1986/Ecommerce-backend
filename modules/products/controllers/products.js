@@ -212,15 +212,11 @@ const productController = {
                 }
             }
         }
+        let newFindArgs = {...findArgs};
+        newFindArgs.category = findArgs.categories;
+        newFindArgs.categories = undefined;
         productModel
-            .find(findArgs)
-            .select("-photo")
-            .populate("category")
-            .sort([
-                [sortBy, order]
-            ])
-            .skip(skip)
-            .limit(limit)
+            .find(newFindArgs)
             .exec((err, data) => {
                 if (err) {
                     return res
@@ -240,3 +236,11 @@ const productController = {
 };
 
 module.exports = productController;
+
+// .select("-photo")
+//             .populate("category")
+//             .sort([
+//                 [sortBy, order]
+//             ])
+//             .skip(skip)
+//             .limit(limit)
