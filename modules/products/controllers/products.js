@@ -212,11 +212,20 @@ const productController = {
                 }
             }
         }
-        let newFindArgs = {...findArgs};
+        let newFindArgs = {
+            ...findArgs
+        };
         newFindArgs.category = findArgs.categories;
         newFindArgs.categories = undefined;
         productModel
             .find(newFindArgs)
+            .select("-photo")
+            .populate("category")
+            .sort([
+                [sortBy, order]
+            ])
+            .skip(skip)
+            .limit(limit)
             .exec((err, data) => {
                 if (err) {
                     return res
@@ -227,7 +236,7 @@ const productController = {
             });
     },
     sendProductPhoto: (req, res, next) => {
-        if(req.product.photo.data) {
+        if (req.product.photo.data) {
             res.set('Content-Type', req.product.photo.contentType)
             return res.send(req.product.photo.data);
         }
@@ -236,11 +245,3 @@ const productController = {
 };
 
 module.exports = productController;
-
-// .select("-photo")
-//             .populate("category")
-//             .sort([
-//                 [sortBy, order]
-//             ])
-//             .skip(skip)
-//             .limit(limit)
