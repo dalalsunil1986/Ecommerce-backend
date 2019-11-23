@@ -215,8 +215,11 @@ const productController = {
         let newFindArgs = {
             ...findArgs
         };
-        newFindArgs.category = findArgs.categories;
-        newFindArgs.categories = undefined;
+        if (!(Object.entries(findArgs).length === 0 && findArgs.constructor === Object)) {
+            newFindArgs.category = findArgs.categories;
+            newFindArgs.categories = undefined;
+        }
+
         productModel
             .find(newFindArgs)
             .select("-photo")
