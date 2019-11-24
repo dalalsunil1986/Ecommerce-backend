@@ -216,7 +216,7 @@ const productController = {
             ...findArgs
         };
         if (!(Object.entries(findArgs).length === 0 && findArgs.constructor === Object)) {
-            if(findArgs.categories) {
+            if (findArgs.categories) {
                 newFindArgs.category = findArgs.categories;
                 newFindArgs.categories = undefined;
             }
@@ -245,6 +245,30 @@ const productController = {
             return res.send(req.product.photo.data);
         }
         next();
+    },
+    listSearch: (req, res, next) => {
+        //create query here
+        const query = {};
+        if (req.query.search) {
+            query.name = {
+                $regex: req.query.search,
+                $options: 'i'
+            }
+
+            if (req.query.category && req.query.category != 'All') {
+                query.category = req.query.category
+            }
+            productModel.find(query, ((err, products) => {
+                if (err || !products) {
+                    return res
+                        .status(404)
+                        .json({error: "Product Not found!!!"});
+                }
+                return res
+                    .status(200)
+                    .json(products);
+            })).select('-photo');
+        }
     }
 };
 

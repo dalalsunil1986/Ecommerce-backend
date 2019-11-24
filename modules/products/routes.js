@@ -12,6 +12,7 @@ module.exports = (router) => {
     router.get('/products/categories', productController.getProductCategories);
     router.post("/products/by/search", productController.searchProduct);
     router.get('/product/photo/:productId', productController.sendProductPhoto);
+    router.get('/products/search', productController.listSearch);
 
     router.param('productId', productController.getProductById);
     router.param('userId', userController.findUserById);
