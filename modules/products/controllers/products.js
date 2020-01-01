@@ -269,6 +269,35 @@ const productController = {
                     .json(products);
             })).select('-photo');
         }
+    },
+    decreaseQuantity: (req, res, next) => {
+        let bulkOps = req
+            .body
+            .order
+            .products
+            .map((item) => {
+                return {
+                    updateOne: {
+                        filter: {
+                            _id: item._id
+                        },
+                        update: {
+                            $inc: {
+                                quantity: -item.count,
+                                sold: + item.count
+                            }
+                        }
+                    }
+                }
+            });
+        productModel.bulkWrite(bulkOps, {}, (err, products) => {
+            if (err) {
+                return res
+                    .status(404)
+                    .json({error: "Product Not found!!!"});
+            }
+            next();
+        });
     }
 };
 
