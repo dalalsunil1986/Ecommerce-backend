@@ -26,6 +26,20 @@ const userDao = {
                 resolve(user);
             });
         });
+    },
+    updateUserHistory: (query, history) => {
+        return new Promise((resolve, reject) => {
+            userModel.findOneAndUpdate(query, {
+                $push: {history: history}
+            }, {
+                new: true
+            }, (err, user) => {
+                if (err) {
+                    return reject({error: "You are not Authorised!!!"});
+                }
+                resolve(user);
+            });
+        });
     }
 };
 

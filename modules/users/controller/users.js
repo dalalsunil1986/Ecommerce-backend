@@ -38,6 +38,47 @@ const userController = {
                     .status(400)
                     .json(err);
             });
+    },
+    addOrderToUserHistory: (req, res, next) => {
+        let history = [];
+        if (req.body.order.products) {
+            req
+                .body
+                .order
+                .products
+                .forEach(item => {
+                    history.push({
+                        _id: item._id,
+                        name: item.name,
+                        description: item.description,
+                        category: item.category,
+                        quantity: item.count,
+                        transcation_id: req.body.order.transcation_id,
+                        amount: req.body.order.amount
+                    });
+                });
+            let query = {
+                _id: req.profile._id
+            };
+
+            userDao
+                .updateUserHistory(query, history)
+                .then((result) => {
+                    result.password = undefined;
+                    console.log(result, "user");
+                    next();
+                })
+                .catch((err) => {
+                    res
+                        .status(400)
+                        .json(err);
+                });
+
+        } else {
+            return res
+                .status(404)
+                .json({message: "Products Not Recieved!!"});
+        }
     }
 
 };
