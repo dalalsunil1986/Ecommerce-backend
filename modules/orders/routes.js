@@ -6,5 +6,7 @@ module.exports = (router) => {
     router.get('/orders/list/:userId', authController.requireSignin, authController.isAuth, authController.isAdmin, orderController.listOrders);
     router.post('/order/create/:userId', authController.requireSignin, authController.isAuth, userController.addOrderToUserHistory, productController.decreaseQuantity, orderController.createOrder);
     router.get('/orders/status-value/:userId', authController.requireSignin, authController.isAuth, authController.isAdmin, orderController.getStatusValues);
+    router.put('/orders/:orderId/status/:userId', authController.requireSignin, authController.isAuth, authController.isAdmin, orderController.updateOrderStatus);
+    router.param('orderId', orderController.findOrderById);
     router.param('userId', userController.findUserById);
 }

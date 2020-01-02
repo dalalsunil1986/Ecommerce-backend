@@ -31,6 +31,41 @@ const orderController = {
     },
     getStatusValues: (req, res) => {
         res.json(Order.schema.path("status").enumValues);
+    },
+    findOrderById: (req, res, next, id) => {
+        console.log("here!!im ")
+        Order
+            .findById(id)
+            .populate('products product', 'name price')
+            .exec((err, order) => {
+                if (err || !order) {
+                    console.log(err,"er")
+                    return res
+                        .status(400)
+                        .json({error: errorHandler(err)});
+                }
+                req.order = order;
+                next();
+            });
+    },
+    updateOrderStatus: (req, res) => {
+        let order = req.order;
+       
+        Order.updateOne({
+            _id: order._id
+        }, {
+            $set: {
+                status: req.body.status
+            }
+        }, (err, order) => {
+            if (err) {
+                
+                return res
+                    .status(400)
+                    .json({error: errorHandler(err)});
+            }
+            return res.json(order);
+        });
     }
 };
 
