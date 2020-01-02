@@ -28,6 +28,9 @@ const orderController = {
                 }
                 res.json(orders);
             });
+    },
+    getStatusValues: (req, res) => {
+        res.json(Order.schema.path("status").enumValues);
     }
 };
 
