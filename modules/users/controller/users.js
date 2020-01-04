@@ -1,5 +1,5 @@
 const userDao = require('../dao/users');
-
+const validator = require('../../helpers/encryption.js');
 const userController = {
     findUserById: (req, res, next, id) => {
         let query = {
@@ -25,19 +25,40 @@ const userController = {
         let query = {
             _id: req.profile._id
         };
-        userDao
-            .updateUser(query, req.body)
-            .then((result) => {
-                result.password = undefined;
-                return res
-                    .status(200)
-                    .json(result);
-            })
-            .catch((err) => {
-                res
-                    .status(400)
-                    .json(err);
-            });
+        updateUserUtil(req).then((response) => {
+            req.body.password = response;
+            let user = {};
+            if (response === undefined) {
+                user = {
+                    name: req.body.name,
+                    email: req.body.email
+                }
+            } else {
+                user = {
+                    name: req.body.name,
+                    email: req.body.email,
+                    password: response
+                }
+            }
+            userDao
+                .updateUser(query, user)
+                .then((result) => {
+                    result.password = undefined;
+                    return res
+                        .status(200)
+                        .json(result);
+                })
+                .catch((err) => {
+                    res
+                        .status(400)
+                        .json(err);
+                });
+        }).catch((err) => {
+            res
+                .status(400)
+                .json(err);
+        });
+
     },
     addOrderToUserHistory: (req, res, next) => {
         let history = [];
@@ -60,12 +81,10 @@ const userController = {
             let query = {
                 _id: req.profile._id
             };
-
             userDao
                 .updateUserHistory(query, history)
                 .then((result) => {
                     result.password = undefined;
-                    console.log(result, "user");
                     next();
                 })
                 .catch((err) => {
@@ -80,7 +99,22 @@ const userController = {
                 .json({message: "Products Not Recieved!!"});
         }
     }
-
 };
+const updateUserUtil = (req) => {
+    return new Promise((resolve, reject) => {
+        if (req.body.password < 1) {
+            return resolve(undefined);
+        } else {
+            validator
+                .encryptPassword(req.body.password)
+                .then((hashedpassword) => {
+                    return resolve(hashedpassword);
+                })
+                .catch((err) => {
+                    return reject({error: err});
+                });
+        }
+    });
+}
 
 module.exports = userController;
