@@ -40,7 +40,8 @@ const userDao = {
                 resolve(user);
             });
         });
-    }
+    },
+    
 };
 
 module.exports = userDao;

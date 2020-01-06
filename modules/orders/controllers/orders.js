@@ -39,7 +39,7 @@ const orderController = {
             .populate('products product', 'name price')
             .exec((err, order) => {
                 if (err || !order) {
-                    console.log(err,"er")
+                    console.log(err, "er")
                     return res
                         .status(400)
                         .json({error: errorHandler(err)});
@@ -50,7 +50,7 @@ const orderController = {
     },
     updateOrderStatus: (req, res) => {
         let order = req.order;
-       
+
         Order.updateOne({
             _id: order._id
         }, {
@@ -59,13 +59,27 @@ const orderController = {
             }
         }, (err, order) => {
             if (err) {
-                
                 return res
                     .status(400)
                     .json({error: errorHandler(err)});
             }
             return res.json(order);
         });
+    },
+    getPurchaseHistory: (req, res, next) => {
+        Order
+            .find({user: req.profile._id})
+            .populate('user', '_id name')
+            .sort('-createdAt')
+            .exec((err, orders) => {
+                if (err) {
+                    return res
+                        .status(400)
+                        .json({error: errorHandler(err)});
+                }
+                req.body.orders = orders;
+                next();
+            });
     }
 };
 

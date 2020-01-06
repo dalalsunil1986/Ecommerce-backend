@@ -74,7 +74,7 @@ const userController = {
                         description: item.description,
                         category: item.category,
                         quantity: item.count,
-                        transcation_id: req.body.order.transcation_id,
+                        transaction_id: req.body.order.transaction_id,
                         amount: req.body.order.amount
                     });
                 });
@@ -97,6 +97,17 @@ const userController = {
             return res
                 .status(404)
                 .json({message: "Products Not Recieved!!"});
+        }
+    },
+    getOrders: (req, res, next) => {
+        let orders = [];
+        if (req.body.orders) {
+            orders = req.body.orders;
+            return res.json(orders);
+        } else {
+            return res
+                .status(404)
+                .json({message: "No!! Orders Placed"});
         }
     }
 };
