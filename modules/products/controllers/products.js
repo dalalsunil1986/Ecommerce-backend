@@ -163,7 +163,7 @@ const productController = {
                 category: req.product.category
             })
             .limit(limit)
-            .populate('categories', '_id name')
+            .populate('category', '_id name')
             .exec((err, products) => {
                 if (err || !products) {
                     return res

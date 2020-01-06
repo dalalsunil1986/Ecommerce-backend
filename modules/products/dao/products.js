@@ -20,7 +20,7 @@ const productDao = {
             productModel
                 .find()
                 .select("-photo")
-                .populate('categories')
+                .populate('category')
                 .sort([
                     [query.sortBy, query.order]
                 ])
