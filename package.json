@@ -12,6 +12,9 @@
     "example",
     "heroku"
   ],
+  "engines": {
+    "node": "10.x"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
