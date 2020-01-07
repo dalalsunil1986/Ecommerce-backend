@@ -14,6 +14,6 @@ mongoose
     w: "majority"
 })
     .then(() => {
-        console.log(`db connected at ${process.env.DATABASE}`);
+        console.log(`db connected atlas`);
     })
     .catch(err => console.log(err));
