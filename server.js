@@ -10,7 +10,7 @@ const cors = require('cors');
 
 //app...
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 2333;
 const router = express.Router();
 
 //middle ware
@@ -25,5 +25,5 @@ app.use('/', require('./routes/index')(router));
 
 
 app.listen(port, () => {
-    console.log('http://localhost:2333');
+    console.log(`http://localhost:${port}`);
 });
