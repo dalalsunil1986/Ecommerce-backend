@@ -299,6 +299,27 @@ const productController = {
             }
             next();
         });
+    },
+    getProductsByUserId: (req, res) => {
+        let limit = req.query.limit
+            ? parseInt(req.query.limit)
+            : 6;
+            
+        productModel.find({
+               createdBy: req.profile._id
+            })
+            .select("-photo")
+            .populate('users')
+            .exec((err, products) => {
+                if (err || !products) {
+                    return res
+                        .status(400)
+                        .json({error: "Products Not Found!!!"});
+                }
+                res
+                    .status(200)
+                    .json(products);
+            });
     }
 };
 
