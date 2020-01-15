@@ -97,6 +97,14 @@ const authController = {
                 .json({error: 'User not Authorised'});
         }
         next();
+    },
+    isSuperAdmin: (req, res, next) => {
+        if (req.profile.role === 2) {
+            return res
+                .status(403)
+                .json({error: 'User not Authorised'});
+        }
+        next();
     }
 
 };
