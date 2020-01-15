@@ -14,7 +14,8 @@ const authController = {
                     email: req.body.email,
                     name: req.body.name,
                     role: req.body.role,
-                    password: hashedpassword
+                    password: hashedpassword,
+                    role: req.body.role
                 };
                 const user = new userModel(userObj);
                 user.save((err, user) => {

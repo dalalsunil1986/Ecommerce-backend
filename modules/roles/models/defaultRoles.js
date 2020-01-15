@@ -11,7 +11,7 @@ module.exports = () => {
             role_id: 0
         }, {
             name: 'Transporter',
-            role_id: 0
+            role_id: 3
         }
     ]);
 };
