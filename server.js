@@ -1,3 +1,13 @@
+let configFile = null;
+console.log('process.NODE_ENV', process.env.NODE_ENV);
+switch (process.env.NODE_ENV) {
+    case 'dev':
+        break;
+    
+    case 'production':
+        configFile = './config/config-production.env';
+        break;
+}
 const express = require('express');
 require('dotenv').config();
 require('./config/mongoose');
