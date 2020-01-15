@@ -73,7 +73,11 @@ const productController = {
     },
     removeProduct: (req, res, next) => {
         const product = req.product;
-
+        if (product.createdBy !== req.profile._id) {
+            return res
+                .status(404)
+                .json({"message": "User Not Authorised!!"})
+        }
         product.remove((err, deleteProduct) => {
             if (err) {
                 return res
@@ -304,10 +308,9 @@ const productController = {
         let limit = req.query.limit
             ? parseInt(req.query.limit)
             : 6;
-            
-        productModel.find({
-               createdBy: req.profile._id
-            })
+
+        productModel
+            .find({createdBy: req.profile._id})
             .select("-photo")
             .populate('users')
             .exec((err, products) => {
