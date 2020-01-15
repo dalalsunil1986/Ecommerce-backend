@@ -17,7 +17,24 @@ const orderController = {
     },
     listOrders: (req, res) => {
         Order
-            .find()
+            .find({})
+            .populate('user', "_id name address")
+            .sort("-created")
+            .exec((err, orders) => {
+                if (err) {
+                    return res
+                        .status(404)
+                        .json({error: errorHandler(err)});
+                }
+                res.json(orders);
+            });
+    },
+    listOrdersByUserId: (req, res) => {
+        let search = {
+            "products.createdBy": req.profile._id
+        };
+        Order
+            .find(search)
             .populate('user', "_id name address")
             .sort("-created")
             .exec((err, orders) => {
