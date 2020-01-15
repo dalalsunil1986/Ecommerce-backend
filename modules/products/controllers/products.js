@@ -21,9 +21,10 @@ const productController = {
                 shipping,
                 price,
                 quantity,
-                category
+                category,
+                createdBy
             } = fields;
-            if (!name || !description || !category || !price || !shipping || !quantity) {
+            if (!name || !description || !category || !price || !shipping || !quantity || !createdBy) {
                 return res
                     .status(400)
                     .json({err: "All fields are required!!!!"});
